@@ -1,0 +1,8 @@
+{
+  "id": 2,
+  "nombre": "Diego",
+  "apellido": "Fernando Actualizado",
+  "correo": "diego.fernando@escuela.com",
+  "especialidad": "Ciencias Naturales",
+  "usuario_id": null
+}
