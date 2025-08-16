@@ -1,0 +1,1 @@
+Este es el archivo read.txt de carpeta2.
