@@ -4,7 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from routers.login import router as login_router 
 from routers.rol_usero import router as rol_user
 from routers.user import router as user_router  
-from routers import asignacion, estudiante, estudio, profesores, notas
+from routers import asignacion, estudiante, estudio, profesores 
 from db import get_db_connection
 
 # Crear la aplicación FastAPI
@@ -31,7 +31,6 @@ app.include_router(asignacion.router, prefix="/asignaciones", tags=["Asignacione
 app.include_router(login_router, prefix="/login", tags=["Autenticación"])
 app.include_router(rol_user, prefix="/usuarios", tags=["Usuarios"])  
 app.include_router(user_router, prefix="/auth", tags=["Auth"])
-app.include_router(notas.router)
 
 @app.get("/")
 def read_root():

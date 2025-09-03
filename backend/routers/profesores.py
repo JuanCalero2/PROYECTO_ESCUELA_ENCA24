@@ -1,9 +1,19 @@
-# routers/profesores.py
+
 from fastapi import APIRouter, HTTPException
 from db import get_db_connection
 from models.profesores import Profesor
 
 router = APIRouter()
+
+# Endpoint para listar profesores
+@router.get("/profesores/list")
+def listar_profesores():
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute('SELECT id, nombre, apellido FROM profesores')
+    profesores = cur.fetchall()
+    cur.close(); conn.close()
+    return profesores
 
 # Ruta para crear un nuevo profesor
 @router.post("/profesores_create/", response_model=Profesor)

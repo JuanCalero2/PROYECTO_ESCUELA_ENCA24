@@ -1,3 +1,54 @@
+-- BORRAR TODA LA INFORMACIÓN DE LA BASE DE DATOS
+TRUNCATE TABLE asignacion, estudios, estudiantes, profesores, usuarios, roles RESTART IDENTITY CASCADE;
+
+-- ROLES
+INSERT INTO roles (nombre) VALUES ('Profesor'), ('Estudiante'), ('Admin');
+
+-- USUARIOS
+INSERT INTO usuarios (nombre, apellido, correo, contrasena, rol_id) VALUES
+('Admin', 'User', 'admin@escuela.com', '$2b$12$wQwQwQwQwQwQwQwQwQwQwOQwQwQwQwQwQwQwQwQwQwQwQwQwQwQwQwQwQwQwQw', 3), -- Admin (rol_id=3)
+('Profe1', 'Apellido1', 'profe1@escuela.com', '$2b$12$wQwQwQwQwQwQwQwQwQwQwOQwQwQwQwQwQwQwQwQwQwQwQwQwQwQwQwQwQwQwQw', 1),
+('Profe2', 'Apellido2', 'profe2@escuela.com', '$2b$12$wQwQwQwQwQwQwQwQwQwQwOQwQwQwQwQwQwQwQwQwQwQwQwQwQwQwQwQwQwQwQw', 1),
+('Profe3', 'Apellido3', 'profe3@escuela.com', '$2b$12$wQwQwQwQwQwQwQwQwQwQwOQwQwQwQwQwQwQwQwQwQwQwQwQwQwQwQwQwQwQwQw', 1),
+('Profe4', 'Apellido4', 'profe4@escuela.com', '$2b$12$wQwQwQwQwQwQwQwQwQwQwOQwQwQwQwQwQwQwQwQwQwQwQwQwQwQwQwQwQwQwQw', 1),
+('Profe5', 'Apellido5', 'profe5@escuela.com', '$2b$12$wQwQwQwQwQwQwQwQwQwQwOQwQwQwQwQwQwQwQwQwQwQwQwQwQwQwQwQwQwQwQw', 1),
+('Estu1', 'Apellido1', 'estu1@escuela.com', '$2b$12$wQwQwQwQwQwQwQwQwQwQwOQwQwQwQwQwQwQwQwQwQwQwQwQwQwQwQwQwQwQwQw', 2),
+('Estu2', 'Apellido2', 'estu2@escuela.com', '$2b$12$wQwQwQwQwQwQwQwQwQwQwOQwQwQwQwQwQwQwQwQwQwQwQwQwQwQwQwQwQwQwQw', 2),
+('Estu3', 'Apellido3', 'estu3@escuela.com', '$2b$12$wQwQwQwQwQwQwQwQwQwQwOQwQwQwQwQwQwQwQwQwQwQwQwQwQwQwQwQwQwQwQw', 2),
+('Estu4', 'Apellido4', 'estu4@escuela.com', '$2b$12$wQwQwQwQwQwQwQwQwQwQwOQwQwQwQwQwQwQwQwQwQwQwQwQwQwQwQwQwQwQwQw', 2),
+('Estu5', 'Apellido5', 'estu5@escuela.com', '$2b$12$wQwQwQwQwQwQwQwQwQwQwOQwQwQwQwQwQwQwQwQwQwQwQwQwQwQwQwQwQwQwQw', 2);
+
+-- PROFESORES
+INSERT INTO profesores (nombre, apellido, correo, especialidad, usuario_id) VALUES
+('Profe1', 'Apellido1', 'profe1@escuela.com', 'Matemáticas', (SELECT id FROM usuarios WHERE correo='profe1@escuela.com')),
+('Profe2', 'Apellido2', 'profe2@escuela.com', 'Física', (SELECT id FROM usuarios WHERE correo='profe2@escuela.com')),
+('Profe3', 'Apellido3', 'profe3@escuela.com', 'Química', (SELECT id FROM usuarios WHERE correo='profe3@escuela.com')),
+('Profe4', 'Apellido4', 'profe4@escuela.com', 'Historia', (SELECT id FROM usuarios WHERE correo='profe4@escuela.com')),
+('Profe5', 'Apellido5', 'profe5@escuela.com', 'Geografía', (SELECT id FROM usuarios WHERE correo='profe5@escuela.com'));
+
+-- ESTUDIANTES
+INSERT INTO estudiantes (nombre, apellido, correo, edad, direccion, usuario_id) VALUES
+('Estu1', 'Apellido1', 'estu1@escuela.com', 18, 'Calle 1', (SELECT id FROM usuarios WHERE correo='estu1@escuela.com')),
+('Estu2', 'Apellido2', 'estu2@escuela.com', 19, 'Calle 2', (SELECT id FROM usuarios WHERE correo='estu2@escuela.com')),
+('Estu3', 'Apellido3', 'estu3@escuela.com', 20, 'Calle 3', (SELECT id FROM usuarios WHERE correo='estu3@escuela.com')),
+('Estu4', 'Apellido4', 'estu4@escuela.com', 21, 'Calle 4', (SELECT id FROM usuarios WHERE correo='estu4@escuela.com')),
+('Estu5', 'Apellido5', 'estu5@escuela.com', 22, 'Calle 5', (SELECT id FROM usuarios WHERE correo='estu5@escuela.com'));
+
+-- MATERIAS
+INSERT INTO estudios (nombre, descripcion, profesor_id) VALUES
+('Matemáticas', 'Materia de matemáticas', 1),
+('Física', 'Materia de física', 2),
+('Química', 'Materia de química', 3),
+('Historia', 'Materia de historia', 4),
+('Geografía', 'Materia de geografía', 5);
+
+-- ASIGNACIONES (cada estudiante con una materia y profesor)
+INSERT INTO asignacion (estudiante_id, estudio_id, fecha_inscripcion) VALUES
+(1, 1, CURRENT_DATE),
+(2, 2, CURRENT_DATE),
+(3, 3, CURRENT_DATE),
+(4, 4, CURRENT_DATE),
+(5, 5, CURRENT_DATE);
 -- Database: escuela
 
 -- DROP DATABASE IF EXISTS escuela;
@@ -96,12 +147,12 @@ VALUES
 ('Profesor'),
 ('Estudiante');
 
--- Insertar usuarios (ejemplo)
--- En la práctica, las contraseñas deben ser encriptadas (ej. bcrypt)
-INSERT INTO usuarios (nombre, apellido, correo, contrasena, rol_id)
-VALUES 
-('Juan', 'Pérez', 'juan.perez@escuela.com', 'hashed_password', 1),  -- Profesor
-('Pedro', 'Ramírez', 'pedro.ramirez@escuela.com', 'hashed_password', 2); -- Estudiante
+INSERT INTO usuarios (id_usuario, nombre_usuario, correo, contrasena, id_rol) VALUES
+    (1, 'admin', 'admin@escuela.com', '$2b$12$wQwQwQwQwQwQwQwQwQwQwOQwQwQwQwQwQwQwQwQwQwQwQwQwQwQwQwQwQwQwQw', 1),
+    (2, 'profesor1', 'profesor1@escuela.com', '$2b$12$wQwQwQwQwQwQwQwQwQwQwOQwQwQwQwQwQwQwQwQwQwQwQwQwQwQwQwQwQwQwQw', 2),
+    (3, 'profesor2', 'profesor2@escuela.com', '$2b$12$wQwQwQwQwQwQwQwQwQwQwOQwQwQwQwQwQwQwQwQwQwQwQwQwQwQwQwQwQwQwQw', 2),
+    (4, 'estudiante1', 'estudiante1@escuela.com', '$2b$12$wQwQwQwQwQwQwQwQwQwQwOQwQwQwQwQwQwQwQwQwQwQwQwQwQwQwQwQwQwQwQw', 3),
+    (5, 'estudiante2', 'estudiante2@escuela.com', '$2b$12$wQwQwQwQwQwQwQwQwQwQwOQwQwQwQwQwQwQwQwQwQwQwQwQwQwQwQwQwQwQwQw', 3);
 
 -- Insertar relación de usuario con profesor
 UPDATE profesores 
@@ -183,15 +234,3 @@ VALUES
 INSERT INTO usuarios (nombre, apellido, correo, contrasena, rol_id)
 VALUES 
 ('andres', 'User', 'andres@escuela.com', '1', (SELECT id FROM roles WHERE nombre = 'Administrador'));
-
-	CREATE TABLE IF NOT EXISTS notas (
-    id SERIAL PRIMARY KEY,
-    estudiante_id INT NOT NULL,
-    asignacion_id INT NOT NULL,
-    nota NUMERIC(5,2) NOT NULL CHECK (nota >= 0 AND nota <= 5),
-    fecha_actualizacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    profesor_id INT NOT NULL,
-    CONSTRAINT fk_estudiante FOREIGN KEY(estudiante_id) REFERENCES estudiantes(id) ON DELETE CASCADE,
-    CONSTRAINT fk_asignacion FOREIGN KEY(asignacion_id) REFERENCES estudios(id) ON DELETE CASCADE,
-    CONSTRAINT fk_profesor FOREIGN KEY(profesor_id) REFERENCES profesores(id) ON DELETE CASCADE
-);

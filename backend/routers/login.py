@@ -18,7 +18,7 @@ logging.basicConfig(level=logging.INFO)
 # Ruta para iniciar sesión y obtener el token JWT
 @router.post("/")
 async def login(request: Request, form_data: OAuth2PasswordRequestForm = Depends()):
-    logging.info(f"Request body: {await request.body()}")
+    logging.info(f"Usuario: {form_data.username}, Password: {form_data.password}")
     conn = None
     cur = None
     try:
@@ -51,8 +51,18 @@ async def login(request: Request, form_data: OAuth2PasswordRequestForm = Depends
             raise HTTPException(status_code=400, detail=" contraseña incorrecta")
 
         # Crear token JWT
-        token_data = {"sub": user["correo"], "rol": user["rol_nombre"]}
+        token_data = {"sub": user["correo"], "rol": user["rol_nombre"], "rol_id": user["rol_id"]}
         token = jwt.encode(token_data, SECRET_KEY, algorithm=ALGORITHM)
+
+        # Preparar respuesta con información del usuario
+        user_info = {
+            "id": user["id"],
+            "nombre": user["nombre"],
+            "apellido": user["apellido"],
+            "correo": user["correo"],
+            "rol_id": user["rol_id"],
+            "rol_nombre": user["rol_nombre"]
+        }
 
     except HTTPException:
         raise  # Relevamos el error específico
@@ -65,4 +75,8 @@ async def login(request: Request, form_data: OAuth2PasswordRequestForm = Depends
         if conn is not None:
             conn.close()
 
-    return {"access_token": token, "token_type": "bearer"}
+    return {
+        "access_token": token, 
+        "token_type": "bearer",
+        "user": user_info
+    }
