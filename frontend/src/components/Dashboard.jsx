@@ -6,6 +6,9 @@ import { useNavigate, Link, useLocation } from 'react-router-dom';
 // import ApiTester from './ApiTester';
 import EstudianteAsignacion from './EstudianteAsignacion';
 import ProfesorEstudiantes from './ProfesorEstudiantes';
+import Materias from './materias';
+import EstudiantesManager from './EstudiantesManager';
+import ProfesoresManager from './ProfesoresManager';
 
 // Importación de estilos
 import '../styles/Dashboard.css';
@@ -120,6 +123,17 @@ const Dashboard = () => {
                 return <EstudianteAsignacion />;
                 
             case 3: // ADMIN
+                // Mostrar según la ruta activa
+                if (location.pathname === '/estudiantes') {
+                    return <EstudiantesManager />;
+                }
+                if (location.pathname === '/profesores') {
+                    return <ProfesoresManager />;
+                }
+                if (location.pathname === '/materias') {
+                    return <Materias />;
+                }
+                // Si está en dashboard, muestra el panel admin
                 return (
                     <div className="admin-content">
                         {/* PANEL DE ESTADÍSTICAS */}
@@ -168,6 +182,11 @@ const Dashboard = () => {
                                     <div className="action-icon">➕</div>
                                     <h3>Agregar Profesor</h3>
                                     <p>Registrar nuevo profesor</p>
+                                </Link>
+                                <Link to="/materias" className="action-card">
+                                <div className="action-icon">➕</div>
+                                <h3>Agregar Materia</h3>
+                                <p>Registrar nueva materia</p>
                                 </Link>
                                 
                                 {/* Enlace para configuración */}
@@ -220,6 +239,14 @@ const Dashboard = () => {
                             className={`nav-item ${isActiveRoute('/profesores') ? 'active' : ''}`}
                         >
                             👨‍🏫 Gestionar Profesores
+                        </Link>
+                        
+                        {/* Gestión de materias */}
+                        <Link 
+                            to="/materias" 
+                            className={`nav-item ${isActiveRoute('/materias') ? 'active' : ''}`}
+                        >
+                            📚 Gestionar Materias
                         </Link>
                     </>
                 )}
