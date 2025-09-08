@@ -8,6 +8,7 @@ import Register from './components/Register';
 import Dashboard from './components/Dashboard';
 import ProfesoresManager from './components/ProfesoresManager';
 import EstudiantesManager from './components/EstudiantesManager';
+import Materias from './components/materias';
 import Profile from './components/Profile';
 
 // Importación de estilos globales
@@ -102,6 +103,14 @@ function App() {
                 <EstudiantesManager />
               </ProtectedRoute>
             } 
+          />
+          <Route 
+            path="/materias" 
+            element={
+              <ProtectedRoute>
+                <Materias />
+              </ProtectedRoute>
+            }
           />
           
           {/* Perfil de usuario - Accesible para todos los roles */}
