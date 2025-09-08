@@ -9,7 +9,12 @@ load_dotenv()
 
 class Config:
     # URL de conexión a la base de datos
-    DATABASE_URI = os.getenv('DATABASE_URI', 'postgres:1234@localhost:5432/escuela')
+    # DATABASE_URI = os.getenv('DATABASE_URI', 'postgres:1234@localhost:5432/escuela')
+    DB_NAME = os.getenv('DB_NAME', 'escuela')
+    DB_USER = os.getenv('DB_USER', 'postgres')
+    DB_PASSWORD = os.getenv('DB_PASSWORD', '1')
+    DB_HOST = os.getenv('DB_HOST', 'localhost')
+    DB_PORT = os.getenv('DB_PORT', '5432')
     
     # Clave secreta para firmar tokens JWT, utiliza una clave por defecto o carga desde las variables de entorno
     SECRET_KEY = os.getenv('SECRET_KEY', 'mi_clave_secreta')  # Cambia 'mi_clave_secreta' a una clave más segura
