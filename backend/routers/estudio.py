@@ -39,6 +39,23 @@ def get_estudios():
         conn.close()
     return estudios
 
+@router.get("/estadistica")
+def get_subjects_count():
+    try:
+        conn = get_db_connection()
+        cur = conn.cursor()
+        cur.execute('select count(*) from estudios')
+        count = cur.fetchone()
+        return {"count": count['count']}
+    except Exception as e:
+        print(f"Error en get_subjects_count: {type(e)} - {e}")  # Muestra tipo y mensaje real
+        raise HTTPException(status_code=500, detail=f"Error al obtener la estadística: {str(e)}")
+    finally:
+        if 'cur' in locals():
+            cur.close()
+        if 'conn' in locals():
+            conn.close()
+
 # Ruta para actualizar la información de un estudio por su ID
 @router.put("/estudios_update/{id}")
 def update_estudio(id: int, estudio: Estudio):

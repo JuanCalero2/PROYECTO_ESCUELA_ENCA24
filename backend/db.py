@@ -8,7 +8,11 @@ def get_db_connection():
     """
     try:
         connection = psycopg2.connect(
-            Config.DATABASE_URI,
+            dbname=Config.DB_NAME,
+            user=Config.DB_USER,
+            password=Config.DB_PASSWORD,
+            host=Config.DB_HOST,
+            port=Config.DB_PORT,
             cursor_factory=RealDictCursor
         )
         return connection

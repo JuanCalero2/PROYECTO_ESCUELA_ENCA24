@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
 
 // Importación de componentes específicos por rol
-import ApiTester from './ApiTester';
+// import ApiTester from './ApiTester';
 import EstudianteAsignacion from './EstudianteAsignacion';
 import ProfesorEstudiantes from './ProfesorEstudiantes';
 
@@ -18,14 +18,11 @@ const Dashboard = () => {
     // ESTADO DEL COMPONENTE
     // Datos del usuario autenticado
     const [userData, setUserData] = useState(null);
-    
-    // Estadísticas para el panel de administrador
-    const [stats, setStats] = useState({
-        estudiantes: 0,
-        profesores: 0,
-        cursos: 0
-    });
-    
+    const [studentCount, setStudentCount] = useState(0);
+    const [teacherCount, setTeacherCount] = useState(0);
+    const [subjectCount, setSubjectCount] = useState(0);
+
+
     // Hooks de navegación
     const navigate = useNavigate();
     const location = useLocation();
@@ -50,7 +47,7 @@ const Dashboard = () => {
             setUserData({
                 nombre: user.nombre || 'Usuario',
                 email: user.email || 'usuario@ejemplo.com',
-                rol: user.rol || 'Usuario',
+                rol: user.rol,
                 rol_id: user.rol_id || 2
             });
         } else {
@@ -62,15 +59,30 @@ const Dashboard = () => {
                 rol_id: 2
             });
         }
-
-        // CARGAR ESTADÍSTICAS (simuladas)
-        // En un caso real, estas estadísticas vendrían de la API
-        setStats({
-            estudiantes: 150,
-            profesores: 25,
-            cursos: 45
-        });
     }, [navigate]);
+
+    useEffect(() => {
+  // Fetch de estadística
+    fetch("/estudiantes/estadistica")
+        .then(res => res.json())
+        .then(data => setStudentCount(data))
+        .catch(err => console.error(err));
+    }, []);
+
+    useEffect(() => {
+        // Fetch de estadística de profesores
+        fetch("/profesores/estadistica")
+            .then(res => res.json())
+            .then(data => setTeacherCount(data))
+            .catch(err => console.error(err));
+    }, []);
+    useEffect(() => {
+        // Fetch de estadística de materias
+        fetch("/estudios/estadistica")
+            .then(res => res.json())
+            .then(data => setSubjectCount(data))
+            .catch(err => console.error(err));
+    }, []);
 
     /**
      * Función para cerrar sesión
@@ -116,7 +128,7 @@ const Dashboard = () => {
                             <div className="stat-card">
                                 <div className="stat-icon">👥</div>
                                 <div className="stat-info">
-                                    <h3>{stats.estudiantes}</h3>
+                                    <h3>{studentCount.count}</h3>
                                     <p>Estudiantes</p>
                                 </div>
                             </div>
@@ -125,7 +137,7 @@ const Dashboard = () => {
                             <div className="stat-card">
                                 <div className="stat-icon">👨‍🏫</div>
                                 <div className="stat-info">
-                                    <h3>{stats.profesores}</h3>
+                                    <h3>{teacherCount.count}</h3>
                                     <p>Profesores</p>
                                 </div>
                             </div>
@@ -134,8 +146,8 @@ const Dashboard = () => {
                             <div className="stat-card">
                                 <div className="stat-icon">📚</div>
                                 <div className="stat-info">
-                                    <h3>{stats.cursos}</h3>
-                                    <p>Cursos</p>
+                                    <h3>{subjectCount.count}</h3>
+                                    <p>Materias</p>
                                 </div>
                             </div>
                         </div>
@@ -258,7 +270,7 @@ const Dashboard = () => {
             <div className="main-content">
                 {/* Encabezado del contenido principal */}
                 <header className="dashboard-header">
-                    <h1>Dashboard - {userData.rol}</h1>
+                    <h1>Dashboard - {userData.rol_id}</h1>
                     <div className="user-info">
                         <span>Bienvenido, {userData.nombre}</span>
                     </div>
@@ -270,11 +282,11 @@ const Dashboard = () => {
                     {renderContentByRole()}
                     
                     {/* SECCIÓN DE TESTING DE API (solo para desarrollo) */}
-                    <div className="api-tester-section">
+                    {/* <div className="api-tester-section">
                         <h2>🧪 Probador de API</h2>
                         <p>Prueba la conectividad con el backend</p>
                         <ApiTester />
-                    </div>
+                    </div> */}
                 </div>
             </div>
         </div>

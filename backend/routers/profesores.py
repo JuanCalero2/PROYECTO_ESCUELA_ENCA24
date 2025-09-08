@@ -101,6 +101,23 @@ def get_profesores():
         if conn is not None:
             conn.close()
 
+@router.get("/estadistica")
+def get_teacher_count():
+    try:
+        conn = get_db_connection()
+        cur = conn.cursor()
+        cur.execute('select count(*) from  profesores')
+        count = cur.fetchone()
+        return {"count": count['count']}
+    except Exception as e:
+        print(f"Error en get_teacher_count: {type(e)} - {e}")  # Muestra tipo y mensaje real
+        raise HTTPException(status_code=500, detail=f"Error al obtener la estadística: {str(e)}")
+    finally:
+        if 'cur' in locals():
+            cur.close()
+        if 'conn' in locals():
+            conn.close()
+
 # Ruta para actualizar la información de un profesor por su ID
 @router.put("/profesores_update/{id}", response_model=Profesor)
 def update_profesor(id: int, profesor: Profesor):

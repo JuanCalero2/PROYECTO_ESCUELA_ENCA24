@@ -87,6 +87,23 @@ def get_estudiantes():
         if 'conn' in locals():
             conn.close()
 
+@router.get("/estadistica")
+def get_estudiante_count():
+    try:
+        conn = get_db_connection()
+        cur = conn.cursor()
+        cur.execute('select count(*) from  estudiantes')
+        count = cur.fetchone()
+        return {"count": count['count']}
+    except Exception as e:
+        print(f"Error en get_estudiante_count: {type(e)} - {e}")  # Muestra tipo y mensaje real
+        raise HTTPException(status_code=500, detail=f"Error al obtener la estadística: {str(e)}")
+    finally:
+        if 'cur' in locals():
+            cur.close()
+        if 'conn' in locals():
+            conn.close()
+
 # Ruta para obtener un estudiante por ID
 @router.get("/{id}", response_model=Estudiante)
 def get_estudiante(id: int):
@@ -195,3 +212,7 @@ def delete_estudiante(id: int):
     finally:
         cur.close()
         conn.close()
+
+# Ruta para obtener estadísticas de estudiantes
+
+    

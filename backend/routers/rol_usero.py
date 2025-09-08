@@ -26,6 +26,18 @@ def registrar_usuario(usuario: Usuario):
         if existing_user:
             raise HTTPException(status_code=400, detail="El correo ya está registrado")
 
+        if usuario.rol_id == 2:  # Si el rol es estudiante
+            cur.execute('SELECT nombre, apellido, correo FROM estudiantes WHERE nombre = %s AND apellido = %s AND correo = %s', (usuario.nombre, usuario.apellido, usuario.correo))
+            existing_student = cur.fetchone()
+            if not existing_student:
+                raise HTTPException(status_code=400, detail="El estudiante no está registrado, el nombre, apellido y correo deben coincidir con un estudiante existente")
+
+        if usuario.rol_id == 1:  # Si el rol es profesor
+            cur.execute('SELECT nombre, apellido, correo FROM profesores WHERE nombre = %s AND apellido = %s AND correo = %s', (usuario.nombre, usuario.apellido, usuario.correo))
+            existing_profesor = cur.fetchone()
+            if not existing_profesor:
+                raise HTTPException(status_code=400, detail="El profesor no está registrado, el nombre, apellido y correo deben coincidir con un profesor existente")
+
         # Encriptar la contraseña antes de guardarla
         hashed_password = pwd_context.hash(usuario.contrasena)
 
