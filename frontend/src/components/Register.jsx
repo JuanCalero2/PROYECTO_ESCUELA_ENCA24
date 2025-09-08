@@ -69,6 +69,12 @@ const Register = () => {
             });
             
             if (response.ok) {
+                await fetch(`/estudiantes/getiduser?correo=${correo}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
                 const data = await response.json();
                 console.log('Registro exitoso:', data);
                 if (data.access_token) {
