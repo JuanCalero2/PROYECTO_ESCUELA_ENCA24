@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import '../styles/Materias.css'; // Importar el nuevo archivo CSS exclusivo para el componente Materias
 
 
@@ -36,7 +37,7 @@ const Materias = () => {
     e.preventDefault();
     setError(null);
     try {
-      const response = await fetch('/estudios', {
+      const response = await fetch('estudios/estudios_create', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -60,6 +61,7 @@ const Materias = () => {
   return (
     <div className="manager-container">
       <div className="manager-header">
+        <Link to="/dashboard" className="back-btn">← Volver al Dashboard</Link>
         <h2>Gestión de Materias</h2>
       </div>
       <form className="manager-form" onSubmit={handleSubmit}>
@@ -91,7 +93,7 @@ const Materias = () => {
               <option value="">Selecciona un profesor</option>
               {profesores.map(prof => (
                 <option key={prof.id} value={prof.id}>
-                  {prof.nombre} {prof.apellido} ({prof.especialidad})
+                  {prof.nombre} {prof.apellido}
                 </option>
               ))}
             </select>
@@ -109,7 +111,9 @@ const Materias = () => {
             {materias.map(materia => (
               <li key={materia.id} className="manager-card">
                 <strong>{materia.nombre}</strong>: {materia.descripcion} <br />
-                Profesor: {materia.profesor_id}
+                <strong>Profesor:</strong> {profesores.find(p => p.id === materia.profesor_id)
+                            ? profesores.find(p => p.id === materia.profesor_id).nombre + ' ' + profesores.find(p => p.id === materia.profesor_id).apellido
+                            : materia.profesor_id}
               </li>
             ))}
           </ul>
