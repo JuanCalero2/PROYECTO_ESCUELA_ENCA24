@@ -10,6 +10,7 @@ import ProfesoresManager from './components/ProfesoresManager';
 import EstudiantesManager from './components/EstudiantesManager';
 import Materias from './components/materias';
 import Profile from './components/Profile';
+import AsignacionMateriaEstudiante from './components/asignacionMateriaEstudiante';
 
 // Importación de estilos globales
 import './index.css';
@@ -112,7 +113,14 @@ function App() {
               </ProtectedRoute>
             }
           />
-          
+          <Route 
+            path="/asignacion-materia-estudiante" 
+            element={
+              <ProtectedRoute>
+                <AsignacionMateriaEstudiante />
+              </ProtectedRoute>
+            }
+          />
           {/* Perfil de usuario - Accesible para todos los roles */}
           <Route 
             path="/profile" 

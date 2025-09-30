@@ -52,7 +52,7 @@ const Register = () => {
         
         try {
             // Mapear rol a rol_id según tu base de datos
-            const rol_id = rol === 'Estudiante' ? 2 : (rol === 'Profesor' ? 1 : 3); // 3=Estudiante, 1=Profesor, 2=admin
+            const rol_id = rol === 'Estudiante' ? 2 : (rol === 'Profesor' ? 1 : 3); // 2=Estudiante, 1=Profesor, 3=admin
             
             const response = await fetch('/usuarios/registro/', {
                 method: 'POST',
@@ -67,14 +67,28 @@ const Register = () => {
                     rol_id 
                 }),
             });
-            
+
             if (response.ok) {
-                await fetch(`/estudiantes/getiduser?correo=${correo}`, {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
+                if (rol_id === 2) {
+                    console.log("entrando a el endpoint de estudiantes"+ rol_id);
+                    await fetch(`/estudiantes/getiduser?correo=${correo}`, {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
                 });
+                }
+                if (rol_id === 1) {
+                    console.log("entrando a el endpoint de profesores"+ rol_id);
+                    await fetch(`/profesores/getiduser?correo=${correo}`, {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                    });
+                }
+            
+
                 const data = await response.json();
                 console.log('Registro exitoso:', data);
                 if (data.access_token) {

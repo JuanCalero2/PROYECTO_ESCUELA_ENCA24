@@ -9,6 +9,7 @@ import ProfesorEstudiantes from './ProfesorEstudiantes';
 import Materias from './materias';
 import EstudiantesManager from './EstudiantesManager';
 import ProfesoresManager from './ProfesoresManager';
+import AsignacionMateriaEstudiante from './asignacionMateriaEstudiante';
 
 // Importación de estilos
 import '../styles/Dashboard.css';
@@ -133,6 +134,9 @@ const Dashboard = () => {
                 if (location.pathname === '/materias') {
                     return <Materias />;
                 }
+                if (location.pathname === '/asignacion-materia-estudiante'){
+                    return <AsignacionMateriaEstudiante />;
+                }
                 // Si está en dashboard, muestra el panel admin
                 return (
                     <div className="admin-content">
@@ -247,6 +251,13 @@ const Dashboard = () => {
                             className={`nav-item ${isActiveRoute('/materias') ? 'active' : ''}`}
                         >
                             📚 Gestionar Materias
+                        </Link>
+                        {/* Gestión de asignacion de materia a estudiante */}
+                        <Link 
+                            to="/asignacion-materia-estudiante" 
+                            className={`nav-item ${isActiveRoute('/asignacion-materia-estudiante') ? 'active' : ''}`}
+                        >
+                            📚 Gestionar Asignación de Materia a Estudiante
                         </Link>
                     </>
                 )}

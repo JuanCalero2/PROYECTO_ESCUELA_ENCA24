@@ -118,6 +118,31 @@ def get_teacher_count():
         if 'conn' in locals():
             conn.close()
 
+@router.get("/getiduser")
+def get_user_id_by_correo(correo: str):
+    try:
+        conn = get_db_connection()
+        cur = conn.cursor()
+        cur.execute("select id FROM usuarios WHERE correo = %s", (correo,))
+        usuario_data = cur.fetchone()
+
+        if usuario_data is None:
+            raise HTTPException(status_code=404, detail="Usuario no encontrado")
+
+        cur.execute("UPDATE profesores SET usuario_id = %s WHERE correo = %s", (usuario_data['id'], correo))
+        conn.commit()
+        return {"id": usuario_data['id']}
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error al obtener el ID del usuario: {str(e)}")
+    finally:
+        if 'cur' in locals():
+            cur.close()
+        if 'conn' in locals():
+            conn.close()
+
 # Ruta para actualizar la información de un profesor por su ID
 @router.put("/profesores_update/{id}", response_model=Profesor)
 def update_profesor(id: int, profesor: Profesor):

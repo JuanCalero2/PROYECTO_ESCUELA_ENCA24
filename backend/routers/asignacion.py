@@ -1,5 +1,6 @@
 # Importaciones necesarias para FastAPI y manejo de base de datos
 from fastapi import APIRouter, HTTPException, Request
+from models.asignacion import AsignacionCreate, Asignacion
 from db import get_db_connection
 from jose import jwt, JWTError
 from config import Config  # Importar la clase Config
@@ -289,23 +290,28 @@ def get_asignaciones(request: Request):
 
 # Endpoints adicionales para CRUD de asignaciones (solo para administradores)
 @router.post("/create")
-def create_asignacion(request: Request, estudiante_id: int, estudio_id: int):
-    """
-    Endpoint para crear una nueva asignación (solo para administradores)
-    
-    @param request: Objeto Request de FastAPI
-    @param estudiante_id: ID del estudiante
-    @param estudio_id: ID de la materia/estudio
-    @return: Mensaje de confirmación
-    @raises HTTPException: Si el usuario no es administrador o hay errores
-    """
+def create_asignacion(request: Request, data: AsignacionCreate):
     # Verificar que sea administrador
     user_data = decode_token(request)
     if user_data["rol_id"] != 3:
         raise HTTPException(status_code=403, detail="Acceso denegado. Solo para administradores.")
     
+    conn = get_db_connection()
+    cur = conn.cursor()
+    estudiantes = data.estudiantes
+    
+    try:
+        for estudiante in estudiantes:
+            cur.execute(
+                'INSERT INTO asignacion (estudio_id, estudiante_id, fecha_inscripcion) VALUES (%s, %s, %s)',
+                (data.estudio_id, estudiante, data.fecha_inscripcion)
+            )
+        conn.commit()
+    except Exception as e:
+        conn.rollback()
+        raise HTTPException(status_code=500, detail=f"Error al crear asignación: {str(e)}")
     # Lógica para crear asignación...
-    return {"message": "Asignación creada exitosamente"}
+    return {"message": "Asignación creada exitosamente, falta implementar"}
 
 @router.put("/update/{id}")
 def update_asignacion(request: Request, id: int):

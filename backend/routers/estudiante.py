@@ -104,6 +104,7 @@ def get_estudiante_count():
         if 'conn' in locals():
             conn.close()
 
+# Ruta para obtener el ID de usuario asociado a un correo y actualizar el usuario_id del estudiante
 @router.get("/getiduser")
 def get_user_id_by_correo(correo: str):
     try:
