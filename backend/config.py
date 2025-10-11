@@ -12,7 +12,7 @@ class Config:
     # DATABASE_URI = os.getenv('DATABASE_URI', 'postgres:1234@localhost:5432/escuela')
     DB_NAME = os.getenv('DB_NAME', 'escuela')
     DB_USER = os.getenv('DB_USER', 'postgres')
-    DB_PASSWORD = os.getenv('DB_PASSWORD', '1')
+    DB_PASSWORD = os.getenv('DB_PASSWORD', '1234')
     DB_HOST = os.getenv('DB_HOST', 'localhost')
     DB_PORT = os.getenv('DB_PORT', '5432')
     
