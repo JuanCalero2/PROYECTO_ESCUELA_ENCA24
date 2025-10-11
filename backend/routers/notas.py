@@ -9,7 +9,7 @@ router = APIRouter()
 # Modelo Pydantic
 class Nota(BaseModel):
     estudiante_id: int
-    materia_id: int
+    asignacion_id: int
     nota: float
     profesor_id: int
 
@@ -21,9 +21,9 @@ def create_nota(nota: Nota):
         conn = get_db_connection()
         cur = conn.cursor()
         cur.execute("""
-            INSERT INTO notas (estudiante_id, materia_id, nota, profesor_id, fecha_actualizacion)
+            INSERT INTO notas (estudiante_id, asignacion_id, nota, profesor_id, fecha_actualizacion)
             VALUES (%s, %s, %s, %s, CURRENT_TIMESTAMP) RETURNING *;
-        """, (nota.estudiante_id, nota.materia_id, nota.nota, nota.profesor_id))
+        """, (nota.estudiante_id, nota.asignacion_id, nota.nota, nota.profesor_id))
         new_nota = cur.fetchone()
         conn.commit()
         if new_nota is None:
@@ -60,9 +60,9 @@ def update_nota(id: int, nota: Nota):
         cur = conn.cursor()
         cur.execute("""
             UPDATE notas 
-            SET estudiante_id = %s, materia_id = %s, nota = %s, profesor_id = %s, fecha_actualizacion = CURRENT_TIMESTAMP
+            SET estudiante_id = %s, asignacion_id = %s, nota = %s, profesor_id = %s, fecha_actualizacion = CURRENT_TIMESTAMP
             WHERE id = %s RETURNING *;
-        """, (nota.estudiante_id, nota.materia_id, nota.nota, nota.profesor_id, id))
+        """, (nota.estudiante_id, nota.asignacion_id, nota.nota, nota.profesor_id, id))
         updated_nota = cur.fetchone()
         conn.commit()
         if updated_nota is None:
