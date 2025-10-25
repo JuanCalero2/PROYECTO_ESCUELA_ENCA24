@@ -1,6 +1,6 @@
 .notas-page-container {
     padding: 2rem;
-    background-color: #f9f9f9;
+    background-color: #e3e2f1;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
@@ -46,18 +46,64 @@
     color: #333;
   }
   
-  .edit-btn {
-    background-color: #008CBA;
-    color: white;
-    padding: 8px 12px;
+  /* Estilos para la celda de acciones */
+  .notas-table td:last-child {
+    white-space: nowrap;
+    text-align: center;
+    padding: 8px;
+  }
+
+  .edit-btn, .delete-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 12px;
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    margin: 0 3px;
+    color: white;
+    font-size: 0.875rem;
+    transition: all 0.2s ease;
+    width: auto;
+    min-width: 70px;
+    height: 32px;
   }
-  
+
+  .edit-btn {
+    background-color: #008CBA;
+  }
+
   .edit-btn:hover {
-    background-color: #007B9A;
+    background-color: #006d8f;
+  }
+
+  .delete-btn {
+    background-color: #dc3545;
+  }
+
+  .delete-btn:hover {
+    background-color: #c82333;
+  }
+
+  .edit-btn:disabled, .delete-btn:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+
+  @media (max-width: 768px) {
+    .notas-table td:last-child {
+      padding: 6px;
+    }
+
+    .edit-btn, .delete-btn {
+      padding: 4px 8px;
+      font-size: 0.8rem;
+      min-width: 60px;
+      height: 28px;
+      margin: 0 2px;
+    }
   }
   
   .modal-backdrop {

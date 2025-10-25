@@ -10,12 +10,20 @@ import '../styles/Login.css';
  * Permite a los usuarios iniciar sesión en el sistema
  */
 const Login = () => {
-    const [formData, setFormData] = useState({username: '', password: ''});
+    // ESTADO DEL COMPONENTE
+    // Datos del formulario de login
+    const [formData, setFormData] = useState({
+        username: '',
+        password: ''
+    });
+    
     // Estados de control de la interfaz
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [showPassword, setShowPassword] = useState(false);
-    const navigate = useNavigate();// Hook de navegación
+    
+    // Hook de navegación
+    const navigate = useNavigate();
 
     /**
      * Función para manejar cambios en los campos del formulario
@@ -201,6 +209,22 @@ const Login = () => {
                             Regístrate aquí
                         </Link>
                     </p>
+                </div>
+
+                {/* INFORMACIÓN DE CREDENCIALES DE PRUEBA */}
+                <div className="test-credentials">
+                    <h3>🧪 Credenciales de Prueba:</h3>
+                    <div className="credentials-grid">
+                        <div className="credential-item">
+                            <strong>Admin:</strong> admin@escuela.com / 123456
+                        </div>
+                        <div className="credential-item">
+                            <strong>Profesor:</strong> maria.gonzalez@escuela.com / 123456
+                        </div>
+                        <div className="credential-item">
+                            <strong>Estudiante:</strong> juan.perez@escuela.com / 123456
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

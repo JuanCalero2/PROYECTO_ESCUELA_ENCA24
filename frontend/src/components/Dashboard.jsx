@@ -3,12 +3,9 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
 
 // Importación de componentes específicos por rol
-// import ApiTester from './ApiTester';
+import ApiTester from './ApiTester';
 import EstudianteAsignacion from './EstudianteAsignacion';
 import ProfesorEstudiantes from './ProfesorEstudiantes';
-import Materias from './materias';
-import EstudiantesManager from './EstudiantesManager';
-import ProfesoresManager from './ProfesoresManager';
 
 // Importación de estilos
 import '../styles/Dashboard.css';
@@ -21,11 +18,14 @@ const Dashboard = () => {
     // ESTADO DEL COMPONENTE
     // Datos del usuario autenticado
     const [userData, setUserData] = useState(null);
-    const [studentCount, setStudentCount] = useState(0);
-    const [teacherCount, setTeacherCount] = useState(0);
-    const [subjectCount, setSubjectCount] = useState(0);
-
-
+    
+    // Estadísticas para el panel de administrador
+    const [stats, setStats] = useState({
+        estudiantes: 0,
+        profesores: 0,
+        cursos: 0
+    });
+    
     // Hooks de navegación
     const navigate = useNavigate();
     const location = useLocation();
@@ -50,7 +50,7 @@ const Dashboard = () => {
             setUserData({
                 nombre: user.nombre || 'Usuario',
                 email: user.email || 'usuario@ejemplo.com',
-                rol: user.rol,
+                rol: user.rol || 'Usuario',
                 rol_id: user.rol_id || 2
             });
         } else {
@@ -62,30 +62,15 @@ const Dashboard = () => {
                 rol_id: 2
             });
         }
+
+        // CARGAR ESTADÍSTICAS (simuladas)
+        // En un caso real, estas estadísticas vendrían de la API
+        setStats({
+            estudiantes: 150,
+            profesores: 25,
+            cursos: 45
+        });
     }, [navigate]);
-
-    useEffect(() => {
-  // Fetch de estadística
-    fetch("/estudiantes/estadistica")
-        .then(res => res.json())
-        .then(data => setStudentCount(data))
-        .catch(err => console.error(err));
-    }, []);
-
-    useEffect(() => {
-        // Fetch de estadística de profesores
-        fetch("/profesores/estadistica")
-            .then(res => res.json())
-            .then(data => setTeacherCount(data))
-            .catch(err => console.error(err));
-    }, []);
-    useEffect(() => {
-        // Fetch de estadística de materias
-        fetch("/estudios/estadistica")
-            .then(res => res.json())
-            .then(data => setSubjectCount(data))
-            .catch(err => console.error(err));
-    }, []);
 
     /**
      * Función para cerrar sesión
@@ -123,17 +108,6 @@ const Dashboard = () => {
                 return <EstudianteAsignacion />;
                 
             case 3: // ADMIN
-                // Mostrar según la ruta activa
-                if (location.pathname === '/estudiantes') {
-                    return <EstudiantesManager />;
-                }
-                if (location.pathname === '/profesores') {
-                    return <ProfesoresManager />;
-                }
-                if (location.pathname === '/materias') {
-                    return <Materias />;
-                }
-                // Si está en dashboard, muestra el panel admin
                 return (
                     <div className="admin-content">
                         {/* PANEL DE ESTADÍSTICAS */}
@@ -142,7 +116,7 @@ const Dashboard = () => {
                             <div className="stat-card">
                                 <div className="stat-icon">👥</div>
                                 <div className="stat-info">
-                                    <h3>{studentCount.count}</h3>
+                                    <h3>{stats.estudiantes}</h3>
                                     <p>Estudiantes</p>
                                 </div>
                             </div>
@@ -151,7 +125,7 @@ const Dashboard = () => {
                             <div className="stat-card">
                                 <div className="stat-icon">👨‍🏫</div>
                                 <div className="stat-info">
-                                    <h3>{teacherCount.count}</h3>
+                                    <h3>{stats.profesores}</h3>
                                     <p>Profesores</p>
                                 </div>
                             </div>
@@ -160,8 +134,8 @@ const Dashboard = () => {
                             <div className="stat-card">
                                 <div className="stat-icon">📚</div>
                                 <div className="stat-info">
-                                    <h3>{subjectCount.count}</h3>
-                                    <p>Materias</p>
+                                    <h3>{stats.cursos}</h3>
+                                    <p>Cursos</p>
                                 </div>
                             </div>
                         </div>
@@ -182,11 +156,6 @@ const Dashboard = () => {
                                     <div className="action-icon">➕</div>
                                     <h3>Agregar Profesor</h3>
                                     <p>Registrar nuevo profesor</p>
-                                </Link>
-                                <Link to="/materias" className="action-card">
-                                <div className="action-icon">➕</div>
-                                <h3>Agregar Materia</h3>
-                                <p>Registrar nueva materia</p>
                                 </Link>
                                 
                                 {/* Enlace para configuración */}
@@ -240,17 +209,20 @@ const Dashboard = () => {
                         >
                             👨‍🏫 Gestionar Profesores
                         </Link>
-                        
-                        {/* Gestión de materias */}
-                        <Link 
-                            to="/materias" 
-                            className={`nav-item ${isActiveRoute('/materias') ? 'active' : ''}`}
-                        >
-                            📚 Gestionar Materias
-                        </Link>
                     </>
                 )}
                 
+                {/* Enlace a Notas - solo estudiantes y profesores */}
+                {(userData.rol_id === 1 || userData.rol_id === 2) && (
+                 <Link 
+                      to="/notas" 
+                     className={`nav-item ${isActiveRoute('/notas') ? 'active' : ''}`}
+                 >
+                    📝 Notas
+                </Link>
+                )}
+
+
                 {/* Enlace al perfil - Visible para todos */}
                 <Link 
                     to="/profile" 
@@ -297,7 +269,7 @@ const Dashboard = () => {
             <div className="main-content">
                 {/* Encabezado del contenido principal */}
                 <header className="dashboard-header">
-                    <h1>Dashboard - {userData.rol_id}</h1>
+                    <h1>Dashboard - {userData.rol}</h1>
                     <div className="user-info">
                         <span>Bienvenido, {userData.nombre}</span>
                     </div>
@@ -309,11 +281,11 @@ const Dashboard = () => {
                     {renderContentByRole()}
                     
                     {/* SECCIÓN DE TESTING DE API (solo para desarrollo) */}
-                    {/* <div className="api-tester-section">
+                    <div className="api-tester-section">
                         <h2>🧪 Probador de API</h2>
                         <p>Prueba la conectividad con el backend</p>
                         <ApiTester />
-                    </div> */}
+                    </div>
                 </div>
             </div>
         </div>

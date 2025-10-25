@@ -4,7 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from routers.login import router as login_router 
 from routers.rol_usero import router as rol_user
 from routers.user import router as user_router  
-from routers import asignacion, estudiante, estudio, profesores 
+from routers import asignacion, estudiante, estudios, profesores, notas 
 from db import get_db_connection
 
 # Crear la aplicación FastAPI
@@ -26,11 +26,12 @@ app.add_middleware(
 # Registrar los routers
 app.include_router(estudiante.router, prefix="/estudiantes", tags=["Estudiantes"])
 app.include_router(profesores.router, prefix="/profesores", tags=["Profesores"])
-app.include_router(estudio.router, prefix="/estudios", tags=["Estudios"])
-app.include_router(asignacion.router, prefix="/asignaciones", tags=["Asignaciones"])
+app.include_router(estudios.router, prefix="/estudios", tags=["Estudios"])
+app.include_router(asignacion.router, tags=["Asignaciones"])
 app.include_router(login_router, prefix="/login", tags=["Autenticación"])
 app.include_router(rol_user, prefix="/usuarios", tags=["Usuarios"])  
 app.include_router(user_router, prefix="/auth", tags=["Auth"])
+app.include_router(notas.router, prefix="/notas", tags=["Notas"])
 
 @app.get("/")
 def read_root():
@@ -39,10 +40,3 @@ def read_root():
 @app.get("/health")
 def health_check():
     return {"status": "OK", "message": "La API está funcionando correctamente"}
-    import uvicorn
-    print("🚀 Iniciando el servidor de la API...")
-    print("📍 URL: http://localhost:8000")
-    print("📖 Documentación: http://localhost:8000/docs")
-    print("🔧 Redoc: http://localhost:8000/redoc")
-    print("=" * 50)
-    uvicorn.run(app, host="0.0.0.0", port=8000, reload=True)

@@ -41,7 +41,7 @@ def decode_token(request: Request):
     except JWTError:
         raise HTTPException(status_code=401, detail="Token inválido")
 
-@router.get("/estudiante")
+@router.get("/asignaciones/estudiante")
 def get_asignacion_estudiante(request: Request):
     """
     Endpoint para obtener las asignaciones de un estudiante
@@ -124,7 +124,7 @@ def get_asignacion_estudiante(request: Request):
         cur.close()
         conn.close()
 
-@router.get("/profesor")
+@router.get("/asignaciones/profesor")
 def get_asignacion_profesor(request: Request):
     """
     Endpoint para obtener las materias y estudiantes de un profesor
@@ -217,8 +217,7 @@ def get_asignacion_profesor(request: Request):
         cur.close()
         conn.close()
 
-@router.get("/all")
-def get_asignaciones(request: Request):
+def _get_all_asignaciones(request: Request):
     """
     Endpoint para obtener todas las asignaciones (solo para administradores)
     Muestra todas las asignaciones con información detallada de estudiantes, materias y profesores
@@ -273,7 +272,7 @@ def get_asignaciones(request: Request):
                     "descripcion": a["materia_descripcion"]
                 },
                 "profesor": {
-                    "nombre": a["profesor_nombre"],
+                    "nombre": a["profesor_nombre"], 
                     "apellido": a["profesor_apellido"],
                     "correo": a["profesor_correo"],
                     "especialidad": a["profesor_especialidad"]
@@ -287,8 +286,16 @@ def get_asignaciones(request: Request):
         cur.close()
         conn.close()
 
+@router.get("/asignaciones/all")
+def get_asignaciones(request: Request):
+    return _get_all_asignaciones(request)
+
+@router.get("/asignaciones_get/")
+def get_asignaciones_get(request: Request):
+    return _get_all_asignaciones(request)
+
 # Endpoints adicionales para CRUD de asignaciones (solo para administradores)
-@router.post("/create")
+@router.post("/asignaciones/create")
 def create_asignacion(request: Request, estudiante_id: int, estudio_id: int):
     """
     Endpoint para crear una nueva asignación (solo para administradores)
@@ -307,7 +314,7 @@ def create_asignacion(request: Request, estudiante_id: int, estudio_id: int):
     # Lógica para crear asignación...
     return {"message": "Asignación creada exitosamente"}
 
-@router.put("/update/{id}")
+@router.put("/asignaciones/update/{id}")
 def update_asignacion(request: Request, id: int):
     """
     Endpoint para actualizar una asignación (solo para administradores)
@@ -325,7 +332,7 @@ def update_asignacion(request: Request, id: int):
     # Lógica para actualizar asignación...
     return {"message": "Asignación actualizada exitosamente"}
 
-@router.delete("/delete/{id}")
+@router.delete("/asignaciones/delete/{id}")
 def delete_asignacion(request: Request, id: int):
     """
     Endpoint para eliminar una asignación (solo para administradores)

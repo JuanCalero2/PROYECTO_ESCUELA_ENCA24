@@ -1,7 +1,8 @@
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
 from db import get_db_connection
 from models.profesores import Profesor
+from security.auth import get_current_user
 
 router = APIRouter()
 
@@ -101,23 +102,6 @@ def get_profesores():
         if conn is not None:
             conn.close()
 
-@router.get("/estadistica")
-def get_teacher_count():
-    try:
-        conn = get_db_connection()
-        cur = conn.cursor()
-        cur.execute('select count(*) from  profesores')
-        count = cur.fetchone()
-        return {"count": count['count']}
-    except Exception as e:
-        print(f"Error en get_teacher_count: {type(e)} - {e}")  # Muestra tipo y mensaje real
-        raise HTTPException(status_code=500, detail=f"Error al obtener la estadística: {str(e)}")
-    finally:
-        if 'cur' in locals():
-            cur.close()
-        if 'conn' in locals():
-            conn.close()
-
 # Ruta para actualizar la información de un profesor por su ID
 @router.put("/profesores_update/{id}", response_model=Profesor)
 def update_profesor(id: int, profesor: Profesor):
@@ -200,3 +184,38 @@ def delete_profesor(id: int):
             conn.close()
 
     return {"message": "Profesor eliminado"}
+
+
+# Endpoint para obtener el profesor asociado al usuario autenticado
+@router.get("/me")
+def get_my_profesor(current_user: dict = Depends(get_current_user)):
+    conn = None
+    cur = None
+    try:
+        conn = get_db_connection()
+        cur = conn.cursor()
+        # Buscamos por usuario_id en la tabla profesores
+        cur.execute('SELECT id, nombre, apellido, correo, especialidad, usuario_id FROM profesores WHERE usuario_id = %s', (current_user['id'],))
+        prof = cur.fetchone()
+        if prof is None:
+            # Devolver 200 con id null para simplificar el manejo en frontend
+            return {'id': None}
+
+        profesor = {
+            'id': prof['id'],
+            'nombre': prof['nombre'],
+            'apellido': prof['apellido'],
+            'correo': prof['correo'],
+            'especialidad': prof['especialidad'],
+            'usuario_id': prof['usuario_id']
+        }
+        return profesor
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error al obtener el profesor: {e}")
+    finally:
+        if cur is not None:
+            cur.close()
+        if conn is not None:
+            conn.close()

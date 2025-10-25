@@ -8,8 +8,8 @@ import Register from './components/Register';
 import Dashboard from './components/Dashboard';
 import ProfesoresManager from './components/ProfesoresManager';
 import EstudiantesManager from './components/EstudiantesManager';
-import Materias from './components/materias';
 import Profile from './components/Profile';
+import Notaspage from "./components/Notaspage";
 
 // Importación de estilos globales
 import './index.css';
@@ -36,7 +36,9 @@ const ProtectedRoute = ({ children }) => {
  * Componente principal de la aplicación
  * Define todas las rutas y la estructura de navegación
  */
+
 function App() {
+  const user = { rol: "profesor" }; // o "estudiante"
   return (
     // Router principal que envuelve toda la aplicación
     <Router>
@@ -104,14 +106,6 @@ function App() {
               </ProtectedRoute>
             } 
           />
-          <Route 
-            path="/materias" 
-            element={
-              <ProtectedRoute>
-                <Materias />
-              </ProtectedRoute>
-            }
-          />
           
           {/* Perfil de usuario - Accesible para todos los roles */}
           <Route 
@@ -123,6 +117,16 @@ function App() {
             } 
           />
           
+          {/* ✅ NUEVA RUTA: Notas */}
+          <Route 
+            path="/notas" 
+            element={
+              <ProtectedRoute>
+                <Notaspage user={user} />
+              </ProtectedRoute>
+            } 
+          />
+
           {/* RUTA CATCH-ALL: Maneja URLs no encontradas */}
           <Route path="*" element={<Navigate to="/dashboard" replace />} />
         </Routes>

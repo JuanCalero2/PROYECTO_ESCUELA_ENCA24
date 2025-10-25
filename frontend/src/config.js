@@ -19,9 +19,27 @@ export const API_CONFIG = {
   // ENDPOINTS PARA GESTIÓN DE PROFESORES
   PROFESORES: {
     GET_ALL: '/profesores/profesores_get/',       // Obtener todos los profesores
+    ME: '/profesores/me',                         // Obtener profesor asociado al usuario autenticado
     CREATE: '/profesores/profesores_create/',     // Crear nuevo profesor
     UPDATE: '/profesores/profesores_update/',     // Actualizar profesor existente
     DELETE: '/profesores/profesores_delete/'      // Eliminar profesor
+  },
+
+  // ENDPOINTS PARA ASIGNACIONES
+  ASIGNACIONES: {
+    GET_ALL: '/asignaciones_get/',         // Obtener todas las asignaciones (admin)
+    GET_POR_ESTUDIANTE: '/asignaciones/estudiante', // Obtener asignaciones del estudiante (requiere auth)
+    GET_POR_PROFESOR: '/asignaciones/profesor', // Obtener materias/estudiantes del profesor (requiere auth)
+    GET_ADMIN_ALL: '/asignaciones/all',    // Alternativa para admin
+  },
+
+  // ENDPOINTS PARA NOTAS
+  NOTAS: {
+    GET_ALL: '/notas/nota_view',           // Obtener todas las notas (admin/profesor)
+    GET_POR_ESTUDIANTE: '/notas_estudiante/', // Obtener notas de un estudiante: /notas_estudiante/{id}
+    CREATE: '/notas/create/',              // POST para crear nota (con slash final)
+    UPDATE: '/notas/update/',              // PUT para actualizar nota
+    DELETE: '/notas/delete/',              // DELETE para eliminar nota
   },
   
   // ENDPOINTS PARA AUTENTICACIÓN
