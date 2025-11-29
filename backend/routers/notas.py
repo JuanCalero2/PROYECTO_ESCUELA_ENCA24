@@ -6,24 +6,25 @@ from models.notas import Nota
 
 router = APIRouter()
 
-# Modelo Pydantic
-class Nota(BaseModel):
-    estudiante_id: int
-    materia_id: int
-    nota: float
-    profesor_id: int
-
-
 # Crear una nueva nota
 @router.post("/notas_create/")
 def create_nota(nota: Nota):
     try:
+        # Asegurar que las notas sean números (pueden venir como strings desde el frontend)
+        try:
+            n1 = float(nota.nota1)
+            n2 = float(nota.nota2)
+            n3 = float(nota.nota3)
+        except Exception as e:
+            raise HTTPException(status_code=400, detail=f"Valores de nota inválidos: {e}")
+
+        nota_final = round((n1 + n2 + n3) / 3, 2)
         conn = get_db_connection()
         cur = conn.cursor()
         cur.execute("""
-            INSERT INTO notas (estudiante_id, materia_id, nota, profesor_id, fecha_actualizacion)
-            VALUES (%s, %s, %s, %s, CURRENT_TIMESTAMP) RETURNING *;
-        """, (nota.estudiante_id, nota.materia_id, nota.nota, nota.profesor_id))
+            INSERT INTO notas (id_estudiante, id_materia, nota1, nota2, nota3, notafinal, fecha_registro)
+            VALUES (%s, %s, %s, %s, %s, %s, CURRENT_DATE) RETURNING *;
+        """, (nota.estudiante_id, nota.materia_id, n1, n2, n3, nota_final))
         new_nota = cur.fetchone()
         conn.commit()
         if new_nota is None:
@@ -51,6 +52,20 @@ def get_notas():
         conn.close()
     return notas
 
+# Obtener notas por estudiante y materia
+@router.get("/notas_get/{materia_id}")
+def get_notas_por_estudiante_y_materia(materia_id: int):
+    try:
+        conn = get_db_connection()
+        cur = conn.cursor()
+        cur.execute("SELECT * FROM notas WHERE id_materia = %s", (materia_id,))
+        notas = cur.fetchall()
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error al obtener las notas: {e}")
+    finally:
+        cur.close()
+        conn.close()
+    return notas
 
 # Actualizar una nota por ID
 @router.put("/notas_update/{id}")

@@ -130,6 +130,49 @@ def get_user_id_by_correo(correo: str):
         if 'conn' in locals():
             conn.close()
 
+# Ruta para obtener las notas de un estudiante por su ID
+@router.get("/notas_estudiante/{estudiante_id}")
+def get_notas_estudiante(estudiante_id: int):
+    try:
+        conn = get_db_connection()
+        cur = conn.cursor()
+        cur.execute("select m.nombre, n.nota1, n.nota2, n.nota3, n.notafinal " \
+        "from notas n " \
+        "inner join estudios m on n.id_materia = m.id  " \
+        "WHERE id_estudiante = %s", (estudiante_id,))
+        notas_data = cur.fetchall()
+        return notas_data
+    except Exception as e:
+        print(f"Error en get_notas_estudiante: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Error al obtener las notas del estudiante: {str(e)}")
+    finally:
+        if 'cur' in locals():
+            cur.close()
+        if 'conn' in locals():
+            conn.close()
+
+#ruta para obtener id estudiante por id usuario
+@router.get("/estudiante_by_userid/{usuario_id}")
+def get_estudiante_by_userid(usuario_id: int):
+    try:
+        conn = get_db_connection()
+        cur = conn.cursor()
+        cur.execute("select e.id from estudiantes e inner join usuarios u on e.usuario_id = u.id WHERE usuario_id = %s", (usuario_id,))
+        estudiante_id = cur.fetchone()
+    
+    
+        return estudiante_id
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error al obtener el estudiante por usuario_id: {str(e)}")
+    finally:
+        if 'cur' in locals():
+            cur.close()
+        if 'conn' in locals():
+            conn.close()
+
 # Ruta para obtener un estudiante por ID
 @router.get("/{id}", response_model=Estudiante)
 def get_estudiante(id: int):

@@ -44,6 +44,7 @@ def decode_token(request: Request):
 
 @router.get("/estudiante")
 def get_asignacion_estudiante(request: Request):
+    print("Accediendo a get_asignacion_estudiante")
     """
     Endpoint para obtener las asignaciones de un estudiante
     Solo accesible para usuarios con rol de Estudiante
@@ -57,9 +58,11 @@ def get_asignacion_estudiante(request: Request):
     correo = user_data["correo"]
     rol_id = user_data["rol_id"]
     
+    
     # Verificar que el usuario sea un estudiante
     if rol_id != 2:
         raise HTTPException(status_code=403, detail="Acceso denegado. Solo para estudiantes.")
+    
     
     # Conectar a la base de datos
     conn = get_db_connection()
@@ -77,7 +80,9 @@ def get_asignacion_estudiante(request: Request):
         
         # Verificar que el estudiante existe
         if not estudiante:
+            print(estudiante, correo)
             raise HTTPException(status_code=404, detail="Estudiante no encontrado")
+
         
         # Obtener todas las asignaciones del estudiante con información detallada
         cur.execute("""

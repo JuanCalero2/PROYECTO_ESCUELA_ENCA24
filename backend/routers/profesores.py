@@ -15,6 +15,54 @@ def listar_profesores():
     cur.close(); conn.close()
     return profesores
 
+@router.get("/profesor/materias")
+def obtener_materias_profesor(profesor_id: int):
+    try:
+        conn = get_db_connection()
+        cur = conn.cursor()
+        cur.execute("""
+            SELECT m.id, m.nombre 
+            FROM estudios m
+            JOIN profesores p ON m.profesor_id = p.id
+            WHERE p.id = %s
+        """, (profesor_id,))
+        materias = cur.fetchall()
+        if not materias:
+            raise HTTPException(status_code=404, detail="No se encontraron materias para el profesor dado")
+        return materias
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error al obtener las materias: {e}")
+    finally:
+        if 'cur' in locals():
+            cur.close()
+        if 'conn' in locals():
+            conn.close()
+
+
+@router.get("/profesores/estudiantes_por_materia")
+def obtener_estudiantes_por_materia(materia_id: int):
+    try:
+        conn = get_db_connection()
+        cur = conn.cursor()
+        cur.execute("""
+            select e.id, e.nombre as nombre, m.nombre as materia
+            from asignacion a
+            inner join estudios m on m.id= a.estudio_id
+            inner join estudiantes e on e.id = a.estudiante_id
+            where m.id= %s
+        """, (materia_id,))
+        estudiantes = cur.fetchall()
+        if not estudiantes:
+            raise HTTPException(status_code=404, detail="No se encontraron estudiantes para la materia dada")
+        return estudiantes
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error al obtener los estudiantes: {e}")
+    finally:
+        if 'cur' in locals():
+            cur.close()
+        if 'conn' in locals():
+            conn.close()
+
 # Ruta para crear un nuevo profesor
 @router.post("/profesores_create/", response_model=Profesor)
 def create_profesor(profesor: Profesor):
@@ -112,6 +160,38 @@ def get_teacher_count():
     except Exception as e:
         print(f"Error en get_teacher_count: {type(e)} - {e}")  # Muestra tipo y mensaje real
         raise HTTPException(status_code=500, detail=f"Error al obtener la estadística: {str(e)}")
+    finally:
+        if 'cur' in locals():
+            cur.close()
+        if 'conn' in locals():
+            conn.close()
+
+#ruta para encontrar el id del profesor con el id del usuario
+@router.get("/profesor_by_userid/{usuario_id}")
+def get_profesor_by_userid(usuario_id: int):
+    try:
+        conn = get_db_connection()
+        cur = conn.cursor()
+        cur.execute("SELECT id, nombre, apellido, correo, especialidad, usuario_id FROM profesores WHERE usuario_id = %s", (usuario_id,))
+        profesor_data = cur.fetchone()
+
+        if profesor_data is None:
+            raise HTTPException(status_code=404, detail="Profesor no encontrado")
+
+        profesor = Profesor(
+            id=profesor_data['id'],
+            nombre=profesor_data['nombre'],
+            apellido=profesor_data['apellido'],
+            correo=profesor_data['correo'],
+            especialidad=profesor_data['especialidad'],
+            usuario_id=profesor_data['usuario_id']
+        )
+        return profesor
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error al obtener el profesor: {str(e)}")
     finally:
         if 'cur' in locals():
             cur.close()
