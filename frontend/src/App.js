@@ -11,6 +11,8 @@ import EstudiantesManager from './components/EstudiantesManager';
 import Materias from './components/materias';
 import Profile from './components/Profile';
 import AsignacionMateriaEstudiante from './components/asignacionMateriaEstudiante';
+import GestionarNotas from './components/gestionarnotas';
+import VerNotas from './components/vernotas';
 
 // Importación de estilos globales
 import './index.css';
@@ -130,7 +132,24 @@ function App() {
               </ProtectedRoute>
             } 
           />
-          
+          {/* Gestión de notas - Accesible para profesores */}
+          <Route 
+            path="/gestionar-notas" 
+            element={
+              <ProtectedRoute>
+                <GestionarNotas />
+              </ProtectedRoute>
+            }
+          />
+          {/*ver notas de estudiantes*/}
+          <Route 
+            path="/ver-notas" 
+            element={
+              <ProtectedRoute>
+                <VerNotas />
+              </ProtectedRoute>
+            }
+          />
           {/* RUTA CATCH-ALL: Maneja URLs no encontradas */}
           <Route path="*" element={<Navigate to="/dashboard" replace />} />
         </Routes>

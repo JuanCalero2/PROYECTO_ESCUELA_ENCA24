@@ -1,0 +1,148 @@
+/* Scoped styles for GestionarNotas */
+.gestion-notas-container {
+    max-width: 1150px;
+    margin: 20px auto;
+    padding: 18px;
+    font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, Arial;
+    color: #0f172a;
+}
+
+.gestion-notas-container .header {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    margin-bottom: 16px;
+}
+
+.gestion-notas-container .back-btn {
+    text-decoration: none;
+    color: #0b69ff;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-weight: 600;
+}
+
+.gestion-notas-container .titulo {
+    margin: 0;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #0b1220;
+}
+
+/* Materias list as chips */
+.gestion-notas-container .lista-materias {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 14px 0 22px 0;
+    padding: 0;
+}
+
+.gestion-notas-container .back-btn-materia {
+    background: #eef2ff;
+    color: #0b69ff;
+    border: 1px solid rgba(11,105,255,0.08);
+    padding: 8px 14px;
+    border-radius: 999px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: transform .12s ease, box-shadow .12s ease;
+}
+
+.gestion-notas-container .back-btn-materia:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(11,105,255,0.08);
+}
+
+/* Table styles */
+.gestion-notas-container table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 6px 18px rgba(2,6,23,0.06);
+}
+
+.gestion-notas-container thead th {
+    text-align: left;
+    padding: 12px 14px;
+    background: linear-gradient(90deg,#f8fafc,#f1f5f9);
+    color: #334155;
+    font-weight: 700;
+    font-size: 0.9rem;
+    border-bottom: 1px solid rgba(2,6,23,0.06);
+}
+
+.gestion-notas-container tbody td {
+    padding: 12px 14px;
+    border-bottom: 1px solid rgba(2,6,23,0.04);
+    vertical-align: middle;
+    color: #0f172a;
+}
+
+.gestion-notas-container tbody tr:nth-child(even) td {
+    background: #fbfdff;
+}
+
+/* Inputs inside table */
+.gestion-notas-container input[type="number"] {
+    width: 88px;
+    padding: 8px 10px;
+    border-radius: 8px;
+    border: 1px solid #e6eef7;
+    background: #f8fafc;
+    font-size: 0.95rem;
+}
+
+.gestion-notas-container input[type="number"]:disabled {
+    opacity: 0.8;
+    background: transparent;
+}
+
+/* Action buttons */
+.gestion-notas-container button {
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-weight: 700;
+}
+
+.gestion-notas-container button[disabled] { cursor: not-allowed; opacity: 0.7; }
+
+.gestion-notas-container td button {
+    background: #0b69ff;
+    color: white;
+}
+
+.gestion-notas-container td button:hover {
+    transform: translateY(-2px);
+}
+
+/* Responsive: on small screens show cards instead of table */
+@media (max-width: 820px) {
+    .gestion-notas-container table, .gestion-notas-container thead, .gestion-notas-container tbody, .gestion-notas-container th, .gestion-notas-container td, .gestion-notas-container tr {
+        display: block;
+    }
+
+    .gestion-notas-container thead { display: none; }
+
+    .gestion-notas-container tbody tr {
+        margin-bottom: 12px;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 6px 18px rgba(2,6,23,0.04);
+        padding: 12px;
+    }
+
+    .gestion-notas-container tbody td {
+        display: flex;
+        justify-content: space-between;
+        padding: 8px 0;
+        border-bottom: none;
+    }
+
+    .gestion-notas-container input[type="number"] { width: 120px; }
+}
+

@@ -1,0 +1,61 @@
+/* Styles for AsignacionMateriaEstudiante component */
+.ame-container {
+  max-width: 1100px;
+  margin: 20px auto;
+  padding: 18px;
+  font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, Arial;
+  color: #0f172a;
+}
+
+.ame-header {
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin-bottom:12px;
+}
+
+.ame-back {
+  text-decoration:none;
+  color:#0b69ff;
+  padding:6px 10px;
+  border-radius:8px;
+  font-weight:600;
+}
+
+.ame-title { margin:0; font-size:1.25rem; font-weight:700; }
+
+.ame-form { background: #fff; padding: 16px; border-radius:10px; box-shadow: 0 6px 18px rgba(2,6,23,0.04); }
+.ame-row { display:flex; gap:12px; align-items:center; margin-bottom:12px; }
+.ame-label { width:160px; color:#475569; font-weight:600; }
+.ame-select, .ame-input { padding:8px 10px; border-radius:8px; border:1px solid #e6eef7; background:#f8fafc; }
+
+.ame-fieldset { margin: 14px 0; border: 1px solid rgba(2,6,23,0.04); padding: 12px; border-radius:8px; }
+.ame-students-list { list-style:none; margin:0; padding:0; display:block; max-height:320px; overflow:auto; border-radius:8px; }
+.ame-student-item {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:10px 12px;
+  border-bottom:1px solid rgba(2,6,23,0.04);
+  background: #ffffff;
+}
+.ame-student-item:nth-child(odd) { background:#fbfdff; }
+.ame-student-name { margin-left:10px; font-weight:600; color:#0f172a; }
+
+.ame-student-left { display:flex; align-items:center; gap:12px; }
+
+.ame-students-list::-webkit-scrollbar { height:8px; width:8px; }
+.ame-students-list::-webkit-scrollbar-thumb { background: rgba(11,17,54,0.08); border-radius:8px; }
+
+.ame-actions { display:flex; align-items:center; gap:12px; margin-top:6px; }
+.ame-assign-btn { background:#0b69ff; color:white; padding:10px 14px; border-radius:10px; font-weight:700; border:none; cursor:pointer; }
+.ame-assign-btn[disabled] { opacity:0.6; cursor:not-allowed; }
+.ame-success { color:#065f46; background:#ecfdf5; padding:8px 12px; border-radius:8px; font-weight:600; }
+
+.ame-footer { margin-top:14px; color:#475569; }
+
+@media (max-width:720px) {
+  .ame-row { flex-direction:column; align-items:flex-start; }
+  .ame-label { width:auto; }
+  .ame-student-item { width:100%; }
+}

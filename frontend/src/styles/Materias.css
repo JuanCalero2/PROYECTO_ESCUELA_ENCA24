@@ -103,3 +103,45 @@
   padding: 10px;
   margin: 16px 0;
 }
+
+/* New styles for improved materias layout */
+.materias-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 16px;
+  margin-top: 12px;
+}
+
+.materia-card {
+  background: linear-gradient(180deg,#ffffff,#fbfdff);
+  border: 1px solid rgba(2,6,23,0.06);
+  border-radius: 10px;
+  padding: 14px;
+  box-shadow: 0 8px 22px rgba(2,6,23,0.04);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.materia-card-head {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+}
+
+.materia-card h4 { margin:0; font-size:1.05rem; }
+
+.materia-actions { display:flex; gap:8px; }
+.materia-actions .small { padding:6px 8px; border-radius:8px; border:none; cursor:pointer; background:#0b69ff; color:white; font-weight:700; }
+.materia-actions .small.danger { background:#ef4444; }
+.materia-actions .small.ghost { background:transparent; color:#0b69ff; border:1px solid rgba(11,105,255,0.12); }
+
+.materia-desc { color:#475569; margin:0; font-size:0.95rem; }
+.materia-footer { color:#374151; font-size:0.9rem; }
+
+.manager-search { margin-left: auto; padding:8px 10px; border-radius:8px; border:1px solid #e6eef7; }
+
+@media (max-width:720px) {
+  .form-row { flex-direction:column; }
+}

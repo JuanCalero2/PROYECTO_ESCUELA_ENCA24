@@ -96,7 +96,16 @@ const Dashboard = () => {
         localStorage.removeItem('access_token');
         localStorage.removeItem('token_type');
         localStorage.removeItem('user_info');
-        navigate('/login');
+        // Navegar al login y forzar una recarga completa para limpiar cualquier estado en memoria
+        try {
+            // Intentar navegar con react-router primero (más suave)
+            navigate('/login');
+            // Forzar replace/recarga para asegurar que no quede estado persistente que deje la pantalla en blanco
+            window.location.replace('/login');
+        } catch (err) {
+            // En caso de error, usar una recarga como fallback
+            window.location.href = '/login';
+        }
     };
 
     /**
@@ -261,7 +270,31 @@ const Dashboard = () => {
                         </Link>
                     </>
                 )}
-                
+                {userData.rol_id === 1 &&  (
+                    <>
+                        {/* Gestión de asignaciones */}
+                        <Link 
+                            to="/gestionar-notas" 
+                            className={`nav-item ${isActiveRoute('/gestionar-notas') ? 'active' : ''}`}
+                        >
+                            📋 Gestionar Notas
+                        </Link>
+                    </>
+                )}
+                {
+                    userData.rol_id === 2 && (
+                        <>
+                            {/* ver notas */}
+                            <Link
+                                to="/ver-notas"
+                                className={`nav-item ${isActiveRoute('/ver-notas') ? 'active' : ''}`}
+                            >
+                                📋 Ver Notas
+                            </Link>
+                        </>
+                    )
+                }
+
                 {/* Enlace al perfil - Visible para todos */}
                 <Link 
                     to="/profile" 

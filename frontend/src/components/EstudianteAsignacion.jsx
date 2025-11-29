@@ -27,7 +27,7 @@ const EstudianteAsignacion = () => {
         const fetchAsignaciones = async () => {
             try {
                 // Realizar petición a la API para obtener asignaciones
-                const response = await fetch('/asignaciones/estudiante', {
+                const response = await fetch("http://localhost:8000/asignaciones/estudiante", {
                     headers: {
                         'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
                         'Content-Type': 'application/json',
